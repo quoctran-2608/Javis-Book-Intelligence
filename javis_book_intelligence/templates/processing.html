@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Chưng cất AI · Javis{% endblock %}
+{% block content %}
+<section class="hero"><div><p class="eyebrow">MILESTONE 2 · DURABLE QUEUE</p><h1>Chưng cất tri thức bằng AI</h1><p class="muted">Tạo lượt chạy tại trang chi tiết sách. Từng đơn vị được audit bằng code và commit ngay, tra cứu được trong khi các đơn vị khác vẫn chạy.</p></div><a href="/" class="outline-button">Chọn EPUB trong thư viện</a></section>
+<div class="panel"><h2>Lịch sử lượt xử lý</h2>
+{% if runs %}<div class="job-list"><table><thead><tr><th>Sách</th><th>Trạng thái</th><th>Đã xuất bản</th><th>Cần kiểm tra</th><th>Chi phí</th><th>Chi tiết</th></tr></thead><tbody>
+{% for r in runs %}<tr><td>{{ r.book_title }}<p class="muted">{{ r.mode }} · {{ r.model }}</p></td><td><span class="pill">{{ r.stop_reason or r.state }}</span></td><td>{{ r.completed_jobs }}/{{ r.total_jobs }}</td><td>{{ r.needs_review_jobs }} · lỗi {{ r.failed_jobs }}</td><td>${{ '%.5f'|format(r.spent_usd) }} / ${{ '%.2f'|format(r.budget_usd) }}</td><td><a href="/processing/{{ r.id }}">Mở →</a></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty">Chưa có lượt chưng cất. Mở một sách và chọn Start.</div>{% endif %}</div>
+<p class="muted">Lưu ý: mỗi giá token do bạn tự nhập và cần xác minh với nhà cung cấp. Không có semantic audit; kết quả code audit chưa phải xác thực chân lý.</p>
+{% endblock %}

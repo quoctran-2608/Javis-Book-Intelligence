@@ -14,7 +14,7 @@ def test_migrations_are_idempotent(workspace):
     initialize(db)
     with connection(db) as con:
         assert [r[0] for r in con.execute('SELECT version FROM schema_migrations ORDER BY version')] == [
-            '0001_library','0002_future_distillation_schema']
+            '0001_library','0002_future_distillation_schema','0003_incremental_engine']
         assert con.execute('PRAGMA foreign_key_check').fetchall() == []
 
 

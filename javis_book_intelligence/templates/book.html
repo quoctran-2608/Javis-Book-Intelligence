@@ -17,4 +17,19 @@
 <section class="panel"><h2>Mục lục đã trích xuất</h2><p class="muted">{{ e.units | length }} đơn vị · Dữ liệu nguyên văn trong SQLite</p>
 {% for f in e.files %}<p class="fileline">EPUB: <a href="/files/{{ f.id }}">{{ f.original_filename }}</a> <span class="muted">· SHA-256: {{ f.sha256[:12] }}…</span></p>{% endfor %}
 <div class="toc">{% for u in e.units %}<a href="/units/{{ u.id }}"><span class="toc-index">{{ '%02d' | format(loop.index) }}</span><span>{{ u.title }}</span><span class="muted right">{{ u.char_count }} ký tự</span></a>{% endfor %}</div></section></div>
+{% for f in e.files %}
+<section class="panel"><p class="eyebrow">MILESTONE 2 · OPENAI RESPONSES API</p><h2>Chưng cất EPUB: {{ f.original_filename }}</h2>
+<p class="muted">Mỗi đơn vị là một phần XHTML theo spine EPUB. Nếu phần quá dài, hệ thống đánh dấu cần kiểm tra thay vì cắt mất nội dung. Bằng chứng phải khớp nguyên văn nguồn. Chỉ có code audit; chưa có semantic audit độc lập.</p>
+{% if not has_api_key %}<p class="warn">Chưa phát hiện biến môi trường <code>OPENAI_API_KEY</code>. Hãy cấu hình trên máy, sau đó khởi động lại ứng dụng. Không nhập API key lên biểu mẫu.</p>{% endif %}
+<form action="/processing/create" method="post" class="metadata-form">
+<input type="hidden" name="source_file_id" value="{{ f.id }}">
+<div class="field-row"><label>Chế độ<select name="mode"><option value="general">Sách thông thường (General)</option><option value="dictionary">Từ điển (Dictionary, theo XHTML)</option></select></label><label>Model API (mã model)<input name="model" value="gpt-5.6" required></label></div>
+<div class="field-row"><label>Ngôn ngữ kết quả<input name="language" value="vi" required></label><label>Số đơn vị tối đa cho lượt chạy<input name="unit_limit" type="number" min="1" max="5000" value="20" required></label></div>
+<div class="field-row"><label>Ngân sách tối đa (USD)<input name="budget_usd" type="number" min="0.01" step="0.01" value="1.00" required></label><label>Số lần thử tối đa mỗi đơn vị<input name="max_attempts" type="number" min="1" max="6" value="3" required></label></div>
+<div class="field-row"><label>Đơn giá đầu vào (USD / triệu token)<input name="input_price" type="number" min="0.000001" step="any" placeholder="Nhập giá đã xác minh" required></label><label>Đơn giá đầu ra (USD / triệu token)<input name="output_price" type="number" min="0.000001" step="any" placeholder="Nhập giá đã xác minh" required></label></div>
+<p class="muted">Các đơn giá trên là <strong>giá giả định bạn phải xác minh theo model, region và gói API</strong>, không phải bảng giá hiện hành. Dự toán trước khi gọi API không bảo đảm giới hạn hóa đơn tuyệt đối.</p>
+<div class="field-row"><label>Số ký tự nguồn tối đa / đơn vị<input name="max_source_chars" type="number" min="100" max="100000" value="12000" required></label><label>Giới hạn output tokens / lời gọi<input name="max_output_tokens" type="number" min="256" max="16000" value="1800" required></label></div>
+<button type="submit" {% if not has_api_key %}disabled{% endif %}>Start · Cho phép xử lý lượt này</button>
+</form></section>
+{% endfor %}
 {% endfor %}{% endblock %}

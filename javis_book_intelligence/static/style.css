@@ -4,3 +4,5 @@
 .library-filter{max-width:550px;margin:0 0 18px}.drop-zone.drag-over{border-color:#116a8b;background:#e7f5fa}
 
 .book-card[hidden]{display:none}
+
+.warn{border:1px solid #e7c3a6;background:#fff8ef;padding:12px;border-radius:8px;color:#80502b}.pill{display:inline-block;border-radius:20px;background:#e6f0f4;color:#275466;padding:3px 9px;font-size:12px;font-weight:650}.job-list{overflow:auto;max-height:650px}.job-list table{width:100%;border-collapse:collapse;font-size:13px}.job-list th,.job-list td{text-align:left;border-bottom:1px solid #e7ebf0;padding:11px 8px}.job-list th{color:var(--muted)}.action-row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.action-row form{display:inline-block}.action-row button{padding:8px 12px}.source-quote{white-space:pre-wrap;background:#f2f7f8;border-left:3px solid #81b0be;padding:12px;border-radius:3px;line-height:1.7}.claim{border-top:1px solid var(--line);padding-top:13px;margin-top:13px}.metrics{display:flex;gap:8px;flex-wrap:wrap}.metrics span{background:#f0f4f7;padding:8px 10px;border-radius:7px;font-size:13px}button:disabled{opacity:.5;cursor:not-allowed}select{max-width:100%}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block title %}{{ item.title }} · Tri thức · Javis{% endblock %}{% block content %}
+<a class="back" href="/books/{{ item.book_id }}">← {{ item.book_title }}</a>
+<article class="panel reading"><p class="eyebrow">AI DISTILLATION · {{ item.status|upper }} · CODE AUDIT ONLY</p><h1>{{ item.title }}</h1>
+<p class="muted">{{ item.book_title }} · {{ item.original_filename }} · {{ item.source_title }} · {{ item.model }} · {{ item.prompt_version }}</p>
+<p class="warn">Bản chưng cất AI: kiểm toán tự động chỉ đối chiếu cấu trúc và chuỗi dẫn chứng nguyên văn. Chưa có kiểm toán độc lập về tính đúng ngữ nghĩa và độ đầy đủ.</p>
+<div class="source-text">{{ item.body_text }}</div></article>
+<section class="panel"><h2>Nhận định và dẫn chứng liên kết nguồn</h2>
+{% if item.claims %}{% for c in item.claims %}<div class="claim"><h3>{{ loop.index }}. {{ c.text }}</h3>
+{% for e in c.evidence %}<blockquote class="source-quote">{{ e.quote }}</blockquote><p class="muted">Nguồn: <a href="/units/{{ e.unit_id }}">{{ item.source_title }} · {{ e.source_href }}</a></p>{% endfor %}</div>{% endfor %}
+{% else %}<p class="muted">Chưa có dẫn chứng đạt kiểm toán. Mục này không được lập chỉ mục khi ở trạng thái cần kiểm tra.</p>{% endif %}</section>
+<section class="panel"><h2>Nguồn gốc và lịch sử</h2><p>Vị trí EPUB: <code>{{ item.source_href }}</code> · <a href="/units/{{ item.source_unit_id }}">Mở nguồn gốc</a></p>
+<p class="muted">{{ item.revisions|length }} revision · {{ item.audits|length }} lượt audit.</p>
+{% for a in item.audits %}<p><span class="pill">{{ a.audit_kind }}: {{ 'PASS' if a.passed else 'FAIL' }}</span> <span class="muted">{{ a.created_at }}</span></p>{% endfor %}</section>
+{% endblock %}

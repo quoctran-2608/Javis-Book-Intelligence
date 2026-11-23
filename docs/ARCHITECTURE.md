@@ -31,3 +31,16 @@
 - Nghiệm thu kỹ thuật local với EPUB thử nghiệm; chưa có EPUB thực tế của người dùng trong môi trường và không thể tuyên bố tương thích với mọi EPUB.
 - Chưa hỗ trợ chế độ từ điển đa block, chưa OCR, chưa markdown export hay Google Drive sync.
 - UI chưa có xử lý AI, không trình bày trạng thái distillation giả.
+
+---
+
+## Bổ sung v0.2.0 — Milestone 2
+
+- `engine.py` lưu run/job state vào SQLite; chỉ một worker trong mỗi tiến trình, atomic lease đồng thời bảo vệ khi nhiều tiến trình dùng cùng DB. Mỗi run chỉ có tối đa một request `processing` chưa hết lease.
+- `providers.py` gọi OpenAI Responses API, đọc API key từ biến môi trường, parse JSON Schema và usage; không log payload hoặc secret.
+- `distillation.py` chứa prompt version + Pydantic schema + kiểm tra câu quote chính xác trong nội dung nguồn. Không gọi đây là semantic audit.
+- `0003_incremental_engine.sql` thêm thông tin lease, budget telemetry và JSON checkpoint. Chu trình: **claim -> provider call -> checkpoint response -> code audit & publish in transaction**. FTS trigger trong M1 schema phụ trợ chỉ đánh chỉ mục khi `status='published'`.
+- `search.py` UNION FTS hai nguồn, giữ provenance và bộ lọc `scope=source|distilled|all`.
+- UI xử lý theo `processing_run`, tìm kiếm và `knowledge`. Endpoint form `POST` có Origin check, Host được whitelist để tránh DNS rebinding trên ứng dụng localhost.
+- Khôi phục sau crash: với bản `drafted` đã commit, worker re-audit không gọi API; với request bị crash trước ghi checkpoint, có thể phải gọi lại API và phát sinh phí, không có bảo đảm exactly-once network.
+- Phạm vi: chỉ XHTML unit từ M1; các unit vượt `max_source_chars` được đánh `needs_review`, không cắt cụt. Dictionary Mode không khẳng định đã tách entry chuẩn.
