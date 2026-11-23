@@ -1,0 +1,19 @@
+{% extends 'base.html' %}{% block title %}Thư viện · Javis{% endblock %}
+{% block content %}
+<section class="hero"><div><p class="eyebrow">THƯ VIỆN TRI THỨC CÁ NHÂN</p>
+<h1>Sách của bạn, tìm thấy ngay.</h1><p class="muted">Nhập EPUB, trích xuất theo thứ tự đọc, lưu bản nguồn và tra cứu toàn văn. Không cần cấu hình AI.</p></div>
+<div class="numbers"><div><strong>{{ book_count }}</strong><small>Tác phẩm</small></div><div><strong>{{ unit_count }}</strong><small>Đơn vị nguồn</small></div></div></section>
+<section class="panel"><div class="section-head"><h2>Nhập EPUB</h2><span class="muted">Có thể chọn nhiều file cùng lúc · tối đa 60 MB/file</span></div>
+<form method="post" action="/books/import" enctype="multipart/form-data" class="upload-form">
+<label class="drop-zone" for="epub-files"><span class="drop-icon">⇪</span><strong>Chọn EPUB hoặc kéo thả vào đây</strong><span id="files-label" class="muted">Các tệp sẽ được lưu trong thư mục riêng, không sửa bản gốc</span>
+<input type="file" id="epub-files" name="files" accept=".epub,application/epub+zip" multiple required></label>
+<div class="upload-bottom"><label>Liên kết với tác phẩm có sẵn (tùy chọn)
+<select name="existing_book_id"><option value="">Tạo tác phẩm mới</option>{% for b in books %}<option value="{{ b.id }}">{{ b.title }}</option>{% endfor %}</select></label><button type="submit">Nhập vào thư viện</button></div>
+</form></section>
+<section><div class="section-head"><h2>Danh mục sách</h2><a href="/search" class="action-link">Tìm kiếm toàn thư viện →</a></div>
+<div class="library-filter"><input id="filter-books" type="search" placeholder="Lọc danh mục theo tên, tác giả, ngôn ngữ, tag…" aria-label="Lọc danh mục sách"></div>
+{% if books %}<div class="book-grid">{% for b in books %}<a class="book-card" href="/books/{{ b.id }}" data-filter="{{ (b.title ~ ' ' ~ (b.authors or '') ~ ' ' ~ (b.tags or '') ~ ' ' ~ (b.languages or '')) | lower }}"><div class="book-symbol">▤</div>
+<div><h3>{{ b.title }}</h3><p class="muted">{{ b.authors or 'Chưa rõ tác giả' }}</p><p class="muted">{{ b.tags or 'Chưa gắn thẻ' }} · {{ b.languages or 'Chưa rõ ngôn ngữ' }}</p></div>
+<div class="book-foot"><span>{{ b.editions }} ấn bản</span><span>{{ b.units }} phần đã lập chỉ mục</span></div></a>{% endfor %}</div>
+{% else %}<div class="empty">Thư viện chưa có sách. Hãy nhập một EPUB để bắt đầu.</div>{% endif %}</section>
+{% endblock %}

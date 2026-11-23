@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block title %}{{ unit.title }} · Javis{% endblock %}{% block content %}
+<a class="back" href="/books/{{ unit.book_id }}">← {{ unit.book_title }}</a>
+<article class="panel reading"><p class="eyebrow">VĂN BẢN NGUỒN · CHƯA CHƯNG CẤT</p><h1>{{ unit.title }}</h1>
+<p class="muted">{{ unit.book_title }} · {{ unit.language }} · {{ unit.filename }} · Vị trí EPUB: <code>{{ unit.href }}</code></p>
+<hr><div class="source-text">{{ unit.body_text }}</div></article>
+{% endblock %}

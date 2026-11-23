@@ -1,0 +1,20 @@
+{% extends 'base.html' %}{% block title %}{{ book.title }} · Javis{% endblock %}{% block content %}
+<a class="back" href="/">← Thư viện</a><div class="section-head title-row"><div><p class="eyebrow">HỒ SƠ TÁC PHẨM</p><h1>{{ book.title }}</h1><p class="muted">{{ book.subtitle }}</p></div><a class="outline-button" href="/search?book_id={{ book.id }}">Tìm trong sách</a></div>
+{% for e in book.editions %}
+<div class="two-cols"><section class="panel"><h2>Thông tin sách · Ấn bản {{ loop.index }}</h2>
+<form method="post" action="/books/{{ book.id }}/metadata" class="metadata-form">
+<input type="hidden" name="edition_id" value="{{ e.id }}">
+<label>Tên sách<input name="title" value="{{ book.title }}" required></label>
+<label>Phụ đề<input name="subtitle" value="{{ book.subtitle }}"></label>
+<label>Tác giả (ngăn cách bằng dấu phẩy)<input name="authors" value="{{ e.authors | join(', ') }}"></label>
+<div class="field-row"><label>Ngôn ngữ<input name="language" value="{{ e.language }}"></label><label>Năm xuất bản<input name="publication_year" type="number" min="0" max="3000" value="{{ e.publication_year or '' }}"></label></div>
+<label>Nhà xuất bản<input name="publisher" value="{{ e.publisher }}"></label>
+<label>ISBN<input name="isbn" value="{{ e.isbn }}"></label>
+<label>Nhãn ấn bản / bản dịch<input name="edition_label" value="{{ e.edition_label }}"></label>
+<label>Thẻ chủ đề (ngăn cách bằng dấu phẩy)<input name="tags" value="{{ book.tags | join(', ') }}"></label>
+<label>Mô tả / ghi chú<textarea name="description" rows="3">{{ book.description }}</textarea></label>
+<button type="submit">Lưu thay đổi</button></form></section>
+<section class="panel"><h2>Mục lục đã trích xuất</h2><p class="muted">{{ e.units | length }} đơn vị · Dữ liệu nguyên văn trong SQLite</p>
+{% for f in e.files %}<p class="fileline">EPUB: <a href="/files/{{ f.id }}">{{ f.original_filename }}</a> <span class="muted">· SHA-256: {{ f.sha256[:12] }}…</span></p>{% endfor %}
+<div class="toc">{% for u in e.units %}<a href="/units/{{ u.id }}"><span class="toc-index">{{ '%02d' | format(loop.index) }}</span><span>{{ u.title }}</span><span class="muted right">{{ u.char_count }} ký tự</span></a>{% endfor %}</div></section></div>
+{% endfor %}{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Tìm kiếm · Javis{% endblock %}{% block content %}
+<section class="search-hero"><p class="eyebrow">GLOBAL SEARCH · SQLITE FTS5</p><h1>Tìm kiếm toàn thư viện</h1>
+<p class="muted">Tìm trong văn bản EPUB đã trích xuất. Chỉ mục chưng cất sẽ được mở ở Milestone 2.</p>
+<div class="search-field"><span>⌕</span><input id="query" type="search" autocomplete="off" placeholder="Ví dụ: vô thường, abhidharma, một cụm từ…" autofocus></div>
+<div class="search-options"><div class="modes"><label><input type="radio" name="mode" value="keyword" checked>Từ khóa</label><label><input type="radio" name="mode" value="phrase">Đúng cụm từ</label><label><input type="radio" name="mode" value="prefix">Tiền tố</label></div><span class="muted">Nguồn EPUB · debounce 200 ms</span></div></section>
+<div class="section-head"><h2>Kết quả</h2><span id="search-stats" class="muted">Nhập nội dung để tìm kiếm</span></div>
+<div id="search-results" class="results"><div class="empty">Chưa có truy vấn.</div></div>
+<div class="pagination"><button type="button" class="outline-button" id="prev-page" hidden>← Trước</button><span id="page-number"></span><button type="button" class="outline-button" id="next-page" hidden>Tiếp →</button></div>
+{% endblock %}
